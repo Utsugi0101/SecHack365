@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>問題の可視化</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    svg { border: 1px solid #ccc; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h2>結果</h2>
+  <p>速さ: {{ speed if speed is not none else "?" }} km/h</p>
+  <p>時間: {{ time if time is not none else "?" }} 時間</p>
+  <p>距離: {{ distance if distance is not none else "?" }} km</p>
+
+  <svg width="600" height="200">
+    <!-- 人 -->
+    <circle cx="100" cy="150" r="20" fill="skyblue" />
+    <text x="100" y="100" text-anchor="middle" font-size="16">速さ: {{ speed if speed is not none else "?" }}</text>
+
+    <!-- 矢印 -->
+    <line x1="100" y1="150" x2="{{ 100 + (speed if speed is not none else 50) * 3 }}" y2="150"
+          stroke="black" stroke-width="2" marker-end="url(#arrowhead)" />
+
+    <!-- 道 -->
+    <line x1="50" y1="180" x2="550" y2="180" stroke="#999" stroke-width="4" />
+    <text x="300" y="170" text-anchor="middle" font-size="16">距離: {{ distance if distance is not none else "?" }}</text>
+    <text x="300" y="195" text-anchor="middle" font-size="14">時間: {{ time if time is not none else "?" }}</text>
+
+    <defs>
+      <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="black"/>
+      </marker>
+    </defs>
+  </svg>
+</body>
+</html>
