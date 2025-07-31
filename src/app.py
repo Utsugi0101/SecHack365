@@ -1,23 +1,36 @@
-from flask import Flask, request, send_file, jsonify
-from image_generator import generate_image
+from flask import Flask, request, render_template
+import re
 
 app = Flask(__name__)
 
-@app.route('/generate', methods=['POST'])
-def generate():
-    try:
-        data = request.get_json()
-        problem_type = data.get("problem_type")
-        variables = data.get("variables", {})
-        question = data.get("question", "")
+def extract_values(text):
+    speed = re.search(r'時速(\d+(?:\.\d+)?)', text)
+    time = re.search(r'(\d+(?:\.\d+)?)時間', text)
+    distance = re.search(r'(\d+(?:\.\d+)?)km', text)
 
-        buf = generate_image(problem_type, variables, question)
+    if '何km' in text or '何キロ' in text:
+        distance_value = None
+    else:
+        distance_value = float(distance.group(1)) if distance else None
 
-        return send_file(buf, mimetype='image/png')
+    return {
+        "speed": float(speed.group(1)) if speed else None,
+        "time": float(time.group(1)) if time else None,
+        "distance": distance_value
+    }
 
-    except Exception as e:
-        print("❌ Error:", e)  # ← エラー表示しておく
-        return jsonify({"error": str(e)}), 500
+@app.route("/", methods=["GET", "POST"])
+def index():
+    if request.method == "POST":
+        text = request.form["question"]
+        values = extract_values(text)
+        return render_template("visualize.html", **values)
+    return '''
+        <form method="post">
+            <textarea name="question" rows="4" cols="50" placeholder="問題文を入力してください"></textarea><br>
+            <button type="submit">送信</button>
+        </form>
+    '''
 
 if __name__ == '__main__':
     app.run(debug=True)
