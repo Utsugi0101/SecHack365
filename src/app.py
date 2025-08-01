@@ -21,16 +21,12 @@ def extract_values(text):
 
 @app.route("/", methods=["GET", "POST"])
 def index():
+    values = {"speed": None, "time": None, "distance": None}
+    question = ""
     if request.method == "POST":
-        text = request.form["question"]
-        values = extract_values(text)
-        return render_template("visualize.html", **values)
-    return '''
-        <form method="post">
-            <textarea name="question" rows="4" cols="50" placeholder="問題文を入力してください"></textarea><br>
-            <button type="submit">送信</button>
-        </form>
-    '''
+        question = request.form["question"]
+        values = extract_values(question)
+    return render_template("visualize.html", question=question, **values)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
