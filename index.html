@@ -1,74 +1,13 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8" />
-  <title>速さ・距離・時間 可視化</title>
-  <style>
-    body { font-family: sans-serif; padding: 20px; }
-    input { width: 80px; margin: 0 10px; }
-  </style>
-</head>
-<body>
-  <h2>速さ・距離・時間の可視化ツール</h2>
-
-  <div>
-    <label>速さ (km/h): <input type="number" id="speed" /></label>
-    <label>時間 (h): <input type="number" id="time" /></label>
-    <label>距離 (km): <input type="number" id="distance" /></label>
-  </div>
-
-  <svg id="visual" width="600" height="200" style="border:1px solid #ccc; margin-top: 20px;">
-    <!-- 人 -->
-    <circle id="person" cx="100" cy="150" r="20" fill="skyblue" />
-    <text id="speed-label" x="100" y="100" text-anchor="middle" font-size="16" fill="black">速さ: ? km/h</text>
-
-    <!-- 矢印（速さ） -->
-    <line id="arrow" x1="100" y1="150" x2="200" y2="150" stroke="black" marker-end="url(#arrowhead)" stroke-width="2"/>
-
-    <!-- 道 -->
-    <line x1="50" y1="180" x2="550" y2="180" stroke="#999" stroke-width="4" />
-    <text id="distance-label" x="300" y="170" text-anchor="middle" font-size="16" fill="black">距離: ? km</text>
-
-    <!-- 時間 -->
-    <text id="time-label" x="300" y="195" text-anchor="middle" font-size="14" fill="#333">時間: ? h</text>
-
-    <defs>
-      <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-        <polygon points="0 0, 10 3.5, 0 7" fill="black"/>
-      </marker>
-    </defs>
-  </svg>
-
-  <script>
-    const speedInput = document.getElementById("speed");
-    const timeInput = document.getElementById("time");
-    const distanceInput = document.getElementById("distance");
-
-    const speedLabel = document.getElementById("speed-label");
-    const distanceLabel = document.getElementById("distance-label");
-    const timeLabel = document.getElementById("time-label");
-    const arrow = document.getElementById("arrow");
-
-    function update() {
-      const speed = parseFloat(speedInput.value);
-      const time = parseFloat(timeInput.value);
-      const distance = parseFloat(distanceInput.value);
-
-      speedLabel.textContent = "速さ: " + (isNaN(speed) ? "?" : speed + " km/h");
-      timeLabel.textContent = "時間: " + (isNaN(time) ? "?" : time + " h");
-      distanceLabel.textContent = "距離: " + (isNaN(distance) ? "?" : distance + " km");
-
-      // 矢印の長さ調整（速さに比例）
-      const startX = 100;
-      const scale = 3; // 1 km/h = 3px
-      const arrowLength = isNaN(speed) ? 100 : Math.min(speed * scale, 400);
-      arrow.setAttribute("x2", startX + arrowLength);
-    }
-
-    speedInput.addEventListener("input", update);
-    timeInput.addEventListener("input", update);
-    distanceInput.addEventListener("input", update);
-    update();
-  </script>
-</body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sechack365</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
